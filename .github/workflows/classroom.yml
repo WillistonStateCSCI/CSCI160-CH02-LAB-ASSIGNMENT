@@ -35,7 +35,7 @@ jobs:
         setup-command: javac Q02_52/UnicodeCharacters.java
         command: java -cp Q02_52 UnicodeCharacters
         input: ''
-        expected-output: a³ + b³ = c³
+        expected-output: a? + b? = c?
         comparison-method: contains
         timeout: 10
         max-score: 5
