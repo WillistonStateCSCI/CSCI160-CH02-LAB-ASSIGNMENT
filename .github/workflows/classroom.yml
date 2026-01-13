@@ -1,0 +1,48 @@
+name: Autograding Tests
+'on':
+- push
+- repository_dispatch
+permissions:
+  checks: write
+  actions: read
+  contents: read
+jobs:
+  run-autograding-tests:
+    runs-on: ubuntu-latest
+    if: github.actor != 'github-classroom[bot]'
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    - name: Q02_51 Test
+      id: q02_51-test
+      uses: classroom-resources/autograding-io-grader@v1
+      with:
+        test-name: Q02_51 Test
+        setup-command: javac Q02_51/CircleMath.java
+        command: java -cp Q02_51 CircleMath
+        input: ''
+        expected-output: |-
+          The circumference of a circle of radius 3.2 inches
+          is 20.096000000000004 inches.
+        comparison-method: contains
+        timeout: 10
+        max-score: 5
+    - name: Q02_52 Test
+      id: q02_52-test
+      uses: classroom-resources/autograding-io-grader@v1
+      with:
+        test-name: Q02_52 Test
+        setup-command: javac Q02_52/UnicodeCharacters.java
+        command: java -cp Q02_52 UnicodeCharacters
+        input: ''
+        expected-output: a³ + b³ = c³
+        comparison-method: contains
+        timeout: 10
+        max-score: 5
+    - name: Autograding Reporter
+      uses: classroom-resources/autograding-grading-reporter@v1
+      env:
+        Q02_51-TEST_RESULTS: "${{steps.q02_51-test.outputs.result}}"
+        Q02_52-TEST_RESULTS: "${{steps.q02_52-test.outputs.result}}"
+      with:
+        runners: q02_51-test,q02_52-test
